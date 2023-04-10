@@ -19,3 +19,16 @@ return await page.waitForFunction(t => {
     return JSON.parse(localStorage['react-todos']).map((todo: any) => todo.title).includes(t);
 }, title);
 }
+
+export async function createTodo(page: Page) {
+    const TODO_ITEMS = [
+        'buy milk',
+        'buy eggs',
+        'buy cheese'
+      ];
+    const newTodo = page.getByPlaceholder('What needs to be done?');
+    for (const item of TODO_ITEMS) {
+      await newTodo.fill(item);
+      await newTodo.press('Enter');
+    }
+  }
