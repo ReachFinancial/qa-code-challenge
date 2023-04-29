@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage, checkTodosInLocalStorage } from '../src/todo-app'
+import { TodoAppPage } from '../src/pages/todo-app-page'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://demo.playwright.dev/todomvc');
@@ -12,6 +12,9 @@ const TODO_ITEMS = [
 
 test.describe('Create New Todo', () => {
   test('should be able to create new items on the page', async ({ page }) => {
+    // Arrange
+    const playwrightDev = new TodoAppPage(page);
+    
     // create a new todo locator
     const newTodo = page.getByPlaceholder('What needs to be done?');
 
@@ -34,6 +37,6 @@ test.describe('Create New Todo', () => {
       TODO_ITEMS[1]
     ]);
 
-    await checkNumberOfTodosInLocalStorage(page, 2);
+    await playwrightDev.checkNumberOfTodosInLocalStorage(page, 2);
   });
 });
