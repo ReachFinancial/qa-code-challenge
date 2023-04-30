@@ -124,9 +124,6 @@ export class TodoAppPage {
     await this.todoItemTitleLocator.press(endingButtonAction);
 	}
 
-	// check completed tasks depending on what is needed
-	// not complete means run the code that checks that nothing is completed
-	// otherwise run to check if completed and/or if toggle needs to be checked
 	/**
 	 * check completed tasks depending on what is needed
 	 * not complete means run the code that checks that nothing is completed
