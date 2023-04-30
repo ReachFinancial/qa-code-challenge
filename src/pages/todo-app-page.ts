@@ -15,11 +15,6 @@ export class TodoAppPage {
     readonly todoItemTitleLocator: Locator;
     readonly todoToggleLocator: Locator;
     readonly todoToggleAllLocator: Locator;
-    // earse the ones below
-    // readonly getStartedLink: Locator;
-    // readonly gettingStartedHeader: Locator;
-    // readonly pomLink: Locator;
-    // readonly tocList: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -30,17 +25,12 @@ export class TodoAppPage {
 		this.clearCompleted = page.locator('button[class="clear-completed"]');
 		//inputs
     this.newTodoLocator = page.locator('input[class="new-todo"]');
-    this.todoItemCheckboxLocator = page.locator('li[data-testid="todo-item"]');
+    this.todoItemCheckboxLocator = page.getByTestId('todo-item');
     this.todoItemDeleteButtonLocator = page.locator('button[class="destroy"]');
     this.todoItemEditLocator = page.locator('input[class="edit"]');
     this.todoItemTitleLocator = page.locator('label[data-testid="todo-title"]');
     this.todoToggleLocator = page.locator('input[class="toggle"]');
     this.todoToggleAllLocator = page.locator('input[id="toggle-all"]');
-
-    // this.getStartedLink = page.locator('a', { hasText: 'Get started' });
-    // this.gettingStartedHeader = page.locator('h1', { hasText: 'Installation' });
-    // this.pomLink = page.locator('li', { hasText: 'Guides' }).locator('a', { hasText: 'Page Object Model' });
-    // this.tocList = page.locator('empty');
   }
 
 	TODO_ITEMS = [
@@ -49,6 +39,10 @@ export class TodoAppPage {
 		'finish my tiramisu'
 	];
 	
+  async goto() {
+    await this.page.goto('https://demo.playwright.dev/todomvc');
+  }
+
   async checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
 		return await page.waitForFunction(e => {
 			return JSON.parse(localStorage['react-todos']).length === e;
@@ -67,12 +61,19 @@ export class TodoAppPage {
 		}, title);
 	}
 
+	//add single item from todo list
+	async addItem(index:number) {
+		await this.newTodoLocator.fill(this.TODO_ITEMS[index]);
+    await this.newTodoLocator.press('Enter');
+	}
+
 	// add all todo items
 	async addAllTodoItems() {
-		this.TODO_ITEMS.forEach(async (item, index) => {
-			await this.newTodoLocator.fill(item[index]);
+
+		for(const i in this.TODO_ITEMS){
+			await this.newTodoLocator.fill(this.TODO_ITEMS[i]);
 			await this.newTodoLocator.press('Enter');
-		});
+		}
 	}
 
 	// complete all todos at a single time
@@ -84,6 +85,34 @@ export class TodoAppPage {
 		const countTodos = await this.todoItemCheckboxLocator.count();
 		for(let i = 0; i < countTodos; i++) {
 			await expect(this.todoItemCheckboxLocator.nth(i)).toBeChecked();
+		}
+	}
+
+	async editTodoItem(newString: string, endingButtonAction: string) {
+		await this.todoItemTitleLocator.press('Control+A');
+    await this.todoItemTitleLocator.press('Delete');
+    await this.todoItemEditLocator.fill(newString);
+    await this.todoItemTitleLocator.press(endingButtonAction);
+	}
+
+	async checkCompletedTasks(notCompleted: boolean, toggle: boolean) {
+		if(notCompleted){
+			if(toggle){
+				for (let i = 0; i < this.TODO_ITEMS.length; i++) {
+					await this.todoToggleLocator.nth(i).click();
+					await expect(this.todoItemCheckboxLocator.nth(i)).toHaveClass('completed');
+				};
+			}
+			else {
+				for (let i = 0; i < this.TODO_ITEMS.length; i++) {
+					await expect(this.todoItemCheckboxLocator.nth(i)).toHaveClass('completed');
+				};
+			}
+		}
+		else{
+			for (let i = 0; i < this.TODO_ITEMS.length; i++) {
+				await expect(this.todoItemCheckboxLocator.nth(i)).not.toHaveClass('completed');
+			};
 		}
 	}
 }
