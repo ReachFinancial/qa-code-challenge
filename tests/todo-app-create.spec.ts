@@ -56,7 +56,6 @@ test.describe('Create New Todo', () => {
     await expect(todoAppPage.todoItemTitleLocator.textContent.length).toBeLessThan(lengthOfEditedString);
   });
 
-
   test('should append new items to the bottom of the list', async () => {
     // Arrange  - insert item to todo list
     //Act       - act on inserting new item

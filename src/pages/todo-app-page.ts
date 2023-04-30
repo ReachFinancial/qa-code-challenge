@@ -6,7 +6,7 @@ export class TodoAppPage {
     readonly filterActiveLocator: Locator;
     readonly filterAllLocator: Locator;
     readonly filterCompletedLocator: Locator;
-		readonly clearCompleted: Locator;
+	readonly clearCompleted: Locator;
     //inputs
     readonly newTodoLocator: Locator;
     readonly todoItemCheckboxLocator: Locator;
@@ -16,22 +16,22 @@ export class TodoAppPage {
     readonly todoToggleLocator: Locator;
     readonly todoToggleAllLocator: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+	constructor(page: Page) {
+		this.page = page;
 		//filters
 		this.filterActiveLocator = page.locator('a[href="#/active"]');
-    this.filterAllLocator = page.locator('a[href="#/"]');
-    this.filterCompletedLocator = page.locator('a[href="#/completed"]');
+		this.filterAllLocator = page.locator('a[href="#/"]');
+		this.filterCompletedLocator = page.locator('a[href="#/completed"]');
 		this.clearCompleted = page.locator('button[class="clear-completed"]');
 		//inputs
-    this.newTodoLocator = page.locator('input[class="new-todo"]');
-    this.todoItemCheckboxLocator = page.getByTestId('todo-item');
-    this.todoItemDeleteButtonLocator = page.locator('button[class="destroy"]');
-    this.todoItemEditLocator = page.locator('input[class="edit"]');
-    this.todoItemTitleLocator = page.locator('label[data-testid="todo-title"]');
-    this.todoToggleLocator = page.locator('input[class="toggle"]');
-    this.todoToggleAllLocator = page.locator('input[id="toggle-all"]');
-  }
+		this.newTodoLocator = page.locator('input[class="new-todo"]');
+		this.todoItemCheckboxLocator = page.getByTestId('todo-item');
+		this.todoItemDeleteButtonLocator = page.locator('button[class="destroy"]');
+		this.todoItemEditLocator = page.locator('input[class="edit"]');
+		this.todoItemTitleLocator = page.locator('label[data-testid="todo-title"]');
+		this.todoToggleLocator = page.locator('input[class="toggle"]');
+		this.todoToggleAllLocator = page.locator('input[id="toggle-all"]');
+	}
 
 	// list of todo items for testing purposes
 	TODO_ITEMS = [
@@ -43,9 +43,9 @@ export class TodoAppPage {
 	/**
 	 *  go to website page
 	 */
-  async goto() {
-    await this.page.goto('https://demo.playwright.dev/todomvc');
-  }
+	async goto() {
+		await this.page.goto('https://demo.playwright.dev/todomvc');
+	}
 
 	/**
 	 * 
@@ -53,11 +53,11 @@ export class TodoAppPage {
 	 * @param expected number to assert with of todo items
 	 * @returns if check is successful or not
 	 */
-  async checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
+	async checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
 		return await page.waitForFunction(e => {
 			return JSON.parse(localStorage['react-todos']).length === e;
-			}, expected);
-  }
+		}, expected);
+	}
 
 	/**
 	 * 
@@ -68,7 +68,7 @@ export class TodoAppPage {
 	async checkNumberOfCompletedTodosInLocalStorage(page: Page, expected: number) {
 		return await page.waitForFunction(e => {
 			return JSON.parse(localStorage['react-todos']).filter((todo: any) => todo.completed).length === e;
-			}, expected);
+		}, expected);
 	}
 
 	/**
@@ -89,7 +89,7 @@ export class TodoAppPage {
 	 */
 	async addItem(index:number) {
 		await this.newTodoLocator.fill(this.TODO_ITEMS[index]);
-    await this.newTodoLocator.press('Enter');
+    	await this.newTodoLocator.press('Enter');
 	}
 
 	/**
@@ -119,9 +119,9 @@ export class TodoAppPage {
 	 */
 	async editTodoItem(newString: string, endingButtonAction: string) {
 		await this.todoItemTitleLocator.press('Control+A');
-    await this.todoItemTitleLocator.press('Delete');
-    await this.todoItemEditLocator.fill(newString);
-    await this.todoItemTitleLocator.press(endingButtonAction);
+		await this.todoItemTitleLocator.press('Delete');
+		await this.todoItemEditLocator.fill(newString);
+		await this.todoItemTitleLocator.press(endingButtonAction);
 	}
 
 	/**
@@ -159,7 +159,7 @@ export class TodoAppPage {
 	 */
 	async addItemThenEditTodoItemWithPrompt(newEditedString: string, prompt: string) {
 		await this.addItem(0);
-    await this.todoItemTitleLocator.dblclick();
-    await this.editTodoItem(newEditedString, prompt);
+    	await this.todoItemTitleLocator.dblclick();
+    	await this.editTodoItem(newEditedString, prompt);
 	}
 }

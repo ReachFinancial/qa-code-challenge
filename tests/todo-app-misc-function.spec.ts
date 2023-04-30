@@ -21,7 +21,6 @@ test.describe('other Functions', () => {
     await expect(todoAppPage.todoToggleLocator).not.toBeVisible();
   });
 
-
   test('should filter the list on completion by the active or complete filters', async () => {
     // Arrange - insert item to work with
     await todoAppPage.addItem(0);
