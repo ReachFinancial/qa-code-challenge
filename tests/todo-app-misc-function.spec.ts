@@ -10,57 +10,58 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('other Functions', () => {
   test('should disable buttons when editing an item', async () => {
-		// Arrange
+		// Arrange - insert item to work with
 		await todoAppPage.addItem(0);
 
-    // Act
+    // Act - double click on inserted item
     await todoAppPage.todoItemTitleLocator.dblclick();
 
-    // Assert
+    // Assert - ensure no buttons are available during edit stage
     await expect(todoAppPage.todoItemDeleteButtonLocator).not.toBeVisible();
     await expect(todoAppPage.todoToggleLocator).not.toBeVisible();
   });
 
 
   test('should filter the list on completion by the active or complete filters', async () => {
-    // Arrange
+    // Arrange - insert item to work with
     await todoAppPage.addItem(0);
 
-		// Act
+		// Act - switch to active filter view
     await todoAppPage.filterActiveLocator.click();
 
-    // Assert
+    // Assert - ensure item is visible
     await expect(todoAppPage.todoItemTitleLocator).toBeVisible();
 
-    // Act
+    // Act - switch to completed filter view
     await todoAppPage.filterCompletedLocator.click();
 
-    // Assert
+    // Assert - ensure no items are completed
     await expect(todoAppPage.todoItemTitleLocator).not.toBeVisible();
 
-    // Act
+    // Act - switch to all filtered view complete items then switch back
+		//       to active filter view
     await todoAppPage.filterAllLocator.click();
     await todoAppPage.todoToggleLocator.click();
     await todoAppPage.filterActiveLocator.click();
 
-    // Assert
+    // Assert - no todo items should be visible
     await expect(todoAppPage.todoItemTitleLocator).not.toBeVisible();
 
-    // Act
+    // Act - switch to completed view
     await todoAppPage.filterCompletedLocator.click();
 
-    // Assert
+    // Assert - ensure item is visible in completed filter view
     await expect(todoAppPage.todoItemTitleLocator).toBeVisible();
   });
 
   test('should persist its data on browser refresh', async ({ page }) => {
-		// Arrange
+		// Arrange - insert item to work with
 		await todoAppPage.addItem(0);
 		
-    // Act
+    // Act - reload the page
     await todoAppPage.page.reload();
 
-    // Assert
+    // Assert - ensure items persist on refresh
     await todoAppPage.checkNumberOfTodosInLocalStorage(page, 1);
     await expect(todoAppPage.todoItemTitleLocator).toHaveText(todoAppPage.TODO_ITEMS[0]);
   });

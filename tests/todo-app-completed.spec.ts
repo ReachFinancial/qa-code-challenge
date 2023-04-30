@@ -10,34 +10,37 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Todos Completed', () => {
   test('should be able to successfully mark all todo as completed', async () => {
-    // Arrange/Act
+    // Arrange  - a list of todo items
+    //Act       - insert all the items into the list
     await todoAppPage.addAllTodoItems();
 
-    // Assert
+    // Assert   - check that all items are checked 'completed'
     await todoAppPage.checkCompletedTasks(true, true);
   });
 
   test('should be able to successfully convert back completed tasks to incomplete', async () => {
-    // Arrange
+    // Arrange - insert items as todo items in the list
     await todoAppPage.addAllTodoItems();
+
+    // Arrange - set all todo items to be completed
     await todoAppPage.TodosCompleted();
 
-    // Act
+    // Act - change filter to active and toggle all at same time
     await todoAppPage.filterActiveLocator.click();
     await todoAppPage.todoToggleAllLocator.click();
 
-    // Assert
-    await todoAppPage.checkCompletedTasks(false, false);
+    // Assert - all items are not completed
+    await todoAppPage.checkCompletedTasks(false);
   });
 
   test('should be able to successfully mark all completed with arrow next to the prompt', async () => {
-    // Arrange
+    // Arrange - items into the todo list
     await todoAppPage.addAllTodoItems();
 
-    // Act
+    // Act - toggle all items to completed
     await todoAppPage.todoToggleAllLocator.click();
     
-    // Assert
-    await todoAppPage.checkCompletedTasks(true, false);
+    // Assert - all items are completed
+    await todoAppPage.checkCompletedTasks(true);
   });
 });
