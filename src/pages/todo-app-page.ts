@@ -33,12 +33,14 @@ export class TodoAppPage {
     this.todoToggleAllLocator = page.locator('input[id="toggle-all"]');
   }
 
+	// list of todo items for testing purposes
 	TODO_ITEMS = [
 		'complete code challenge for reach',
 		'ensure coverage for all items is automated',
 		'finish my tiramisu'
 	];
 	
+	// go to website page
   async goto() {
     await this.page.goto('https://demo.playwright.dev/todomvc');
   }
@@ -81,13 +83,7 @@ export class TodoAppPage {
 		return await this.todoToggleAllLocator.click()
 	}
 
-	async allTodosCompleted() {
-		const countTodos = await this.todoItemCheckboxLocator.count();
-		for(let i = 0; i < countTodos; i++) {
-			await expect(this.todoItemCheckboxLocator.nth(i)).toBeChecked();
-		}
-	}
-
+	// edit todo item
 	async editTodoItem(newString: string, endingButtonAction: string) {
 		await this.todoItemTitleLocator.press('Control+A');
     await this.todoItemTitleLocator.press('Delete');
@@ -95,6 +91,9 @@ export class TodoAppPage {
     await this.todoItemTitleLocator.press(endingButtonAction);
 	}
 
+	// check completed tasks depending on what is needed
+	// not complete means run the code that checks that nothing is completed
+	// otherwise run to check if completed and/or if toggle needs to be checked
 	async checkCompletedTasks(notCompleted: boolean, toggle: boolean) {
 		if(notCompleted){
 			if(toggle){
@@ -114,5 +113,11 @@ export class TodoAppPage {
 				await expect(this.todoItemCheckboxLocator.nth(i)).not.toHaveClass('completed');
 			};
 		}
+	}
+
+	async addItemThenEditTodoItemWithPrompt(newEditedString: string, prompt: string) {
+		await this.addItem(0);
+    await this.todoItemTitleLocator.dblclick();
+    await this.editTodoItem(newEditedString, prompt);
 	}
 }
