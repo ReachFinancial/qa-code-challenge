@@ -8,11 +8,11 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@playwright/test": "^1.31.2"
-  },
   "dependencies": {
-    "eslint": "^8.35.0",
-    "playwright": "^1.31.2"
+    "@playwright/test": "^1.33.0",
+    "playwright": "^1.33.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.40.0"
   }
 }
