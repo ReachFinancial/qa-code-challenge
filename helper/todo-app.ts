@@ -1,5 +1,7 @@
 import { Page } from "playwright";
 
+const newTodoInput = 'input.new-todo';
+
 export async function checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
     return await page.waitForFunction(e => {
         return JSON.parse(localStorage['react-todos']).length === e;
@@ -16,4 +18,13 @@ export async function checkTodosInLocalStorage(page: Page, title: string) {
     return await page.waitForFunction(t => {
         return JSON.parse(localStorage['react-todos']).map((todo: any) => todo.title).includes(t);
     }, title);
+}
+
+export async function createTodos(page: Page, toDos: string[]) {
+    const newTodo = page.locator(newTodoInput);
+
+    for (const toDo of toDos) {
+        await newTodo.fill(toDo);
+        await newTodo.press('Enter');
+    }
 }
