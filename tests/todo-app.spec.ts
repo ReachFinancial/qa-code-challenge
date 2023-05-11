@@ -145,11 +145,63 @@ test.describe('Editing existing todos', () => {
 
   test('should cancel edits on escape', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
+    const itemToEdit = todoItems.nth(1);
 
-    await todoItems.nth(1).dblclick();
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).fill('this should not be saved');
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).press('Escape');
+    await itemToEdit.dblclick();
+    await itemToEdit.getByRole('textbox', { name: 'Edit' }).fill('this should not be saved');
+    await itemToEdit.getByRole('textbox', { name: 'Edit' }).press('Escape');
 
     await expect(todoItems).toHaveText(TODO_ITEMS);
+  });
+});
+
+test.describe('Other functions', () => {
+  test.beforeEach(async ({ page }) => {
+    await createTodos(page, TODO_ITEMS);
+    await checkNumberOfTodosInLocalStorage(page, totalCount);
+  });
+
+  test('should disable buttons when editing an item', async ({ page }) => {
+    const todoItems = page.getByTestId('todo-item');
+    const itemToEdit = todoItems.nth(0);
+
+    await itemToEdit.dblclick();
+    await expect(itemToEdit.locator('button.destroy')).not.toBeVisible();
+    await expect(itemToEdit.locator('input.toggle')).not.toBeVisible();
+  });
+
+  test('should filter the list on completion by the active or complete filters', async ({ page }) => {
+    const todoItems = page.getByTestId('todo-item');
+    const toggles = page.locator('input.toggle');
+    const activeFilter = page.locator('[href="#/active"]');
+    const completedFilter = page.locator('[href="#/completed"]');
+    const index = 1;
+
+    await toggles.nth(index).check();
+    await expect(page.getByTestId('todo-count')).toHaveText(totalCount - 1 == 1 ? `${totalCount - 1} item left` : `${totalCount - 1} items left`);
+
+    const completedItem = TODO_ITEMS.splice(index, 1);
+
+    await activeFilter.click();
+    expect(page.url()).toContain('active');
+    await expect(activeFilter).toHaveClass('selected');
+    await expect(todoItems).toHaveText(TODO_ITEMS, { ignoreCase: false });
+
+    await completedFilter.click();
+    expect(page.url()).toContain('completed');
+    await expect(completedFilter).toHaveClass('selected');
+    await expect(todoItems).toHaveText(completedItem, { ignoreCase: false });
+
+    // reload page
+    await page.reload();
+    await activeFilter.click();
+    expect(page.url()).toContain('active');
+    await expect(activeFilter).toHaveClass('selected');
+    await expect(todoItems).toHaveText(TODO_ITEMS, { ignoreCase: false });
+
+    await completedFilter.click();
+    expect(page.url()).toContain('completed');
+    await expect(completedFilter).toHaveClass('selected');
+    await expect(todoItems).toHaveText(completedItem, { ignoreCase: false });
   });
 });
