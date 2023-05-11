@@ -1,7 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
   timeout: 30 * 1000,
   expect: {
     timeout: 5000
@@ -13,23 +12,28 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }], ['list']],
   use: {
     actionTimeout: 0,
-    baseURL: 'https://demo.playwright.dev',
     trace: 'on-first-retry',
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'todo-chromium',
+      testMatch: '**/todo-app.spec.ts',
+      use: { ...devices['Desktop Chrome'], baseURL: 'https://demo.playwright.dev' },
     },
-
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'todo-firefox',
+      testMatch: '**/todo-app.spec.ts',
+      use: { ...devices['Desktop Firefox'], baseURL: 'https://demo.playwright.dev' },
     },
-
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'todo-webkit',
+      testMatch: '**/todo-app.spec.ts',
+      use: { ...devices['Desktop Safari'], baseURL: 'https://demo.playwright.dev' },
+    },
+    {
+      name: 'json-api',
+      testMatch: '**/json-api.spec.ts',
+      use: { ...devices['Desktop Chrome'], baseURL: 'https://jsonplaceholder.typicode.com' },
     },
   ],
 });
