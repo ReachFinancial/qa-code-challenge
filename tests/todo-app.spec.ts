@@ -44,6 +44,14 @@ test.describe('Create New Todo', () => {
     await expect(toDoTitles.nth(totalCount)).toHaveText(newItem);
     await expect(page.getByTestId(TODO.count)).toContainText(`${totalCount + 1} items left`);
   });
+
+  test('should not add duplicate entries', async ({ page }) => {
+    // This test fails as expected because it "works" in the sense that a user can add duplicate items but for purposes of testing, I would consider this a bug
+    const newItem = TODO_ITEMS[1];
+
+    await createTodos(page, [newItem]);
+    await expect(page.getByTestId(TODO.count)).toHaveText(`${totalCount} items left`);
+  });
 });
 
 test.describe('Marking as completed', () => {
@@ -149,6 +157,20 @@ test.describe('Editing existing todos', () => {
     await itemToEdit.getByRole('textbox', { name: 'Edit' }).press('Escape');
 
     await expect(todoItems).toHaveText(TODO_ITEMS);
+  });
+
+  test('should not allow duplicate entries when editing', async ({ page }) => {
+    // This test fails as expected because it "works" in the sense that a user can edit an item with the same value as existing ones but for purposes of testing, I would consider this a bug
+    const todoItems = page.getByTestId(TODO.item);
+    const itemToEdit = todoItems.nth(2);
+    const newItemTitle = TODO_ITEMS[1];
+
+    await itemToEdit.dblclick();
+    await itemToEdit.getByRole('textbox', { name: 'Edit' }).fill(newItemTitle);
+    await itemToEdit.getByRole('textbox', { name: 'Edit' }).dispatchEvent('blur');
+
+    await expect(todoItems).toHaveText(TODO_ITEMS);
+    await checkTodosInLocalStorage(page, newItemTitle);
   });
 });
 
