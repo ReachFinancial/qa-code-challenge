@@ -32,7 +32,6 @@ test.describe('GET all users', () => {
   });
 });
 
-
 test.describe('GET all posts', () => {
   const totalPosts = 100;
   let response: APIResponse;
@@ -134,5 +133,33 @@ test.describe('POST a new post', () => {
     expect(post.title).toEqual(title);
     expect(post.body).toEqual(body);
     expect(post.id).toEqual(101);
+  });
+});
+
+test.describe('What else', () => {
+  test('should be able update a post', async ({ request }) => {
+    const id = 1;
+    const userId = 1;
+    const title = 'This is a new test post';
+    const body = 'this is used for automated testing';
+    const response = await request.put(`/posts/${id}`, {
+      data: {
+        userId,
+        title,
+        body,
+        id
+      },
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+
+    const post = await response.json();
+    expect(response.ok()).toBeTruthy();
+
+    expect(post.userId).toEqual(userId);
+    expect(post.title).toEqual(title);
+    expect(post.body).toEqual(body);
+    expect(post.id).toEqual(id);
   });
 });
