@@ -1,15 +1,11 @@
 import { test, expect, type Page, Locator } from '@playwright/test';
 import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage, checkTodosInLocalStorage, createTodos } from '../helper/todo-app';
+import { todo as TODO_ITEMS } from '../fixtures/todo.json';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://demo.playwright.dev/todomvc');
 });
 
-const TODO_ITEMS = [
-  'complete code challenge for reach',
-  'ensure coverage for all items is automated',
-  'discuss solutions'
-];
 const totalCount = TODO_ITEMS.length;
 
 test.describe('Create New Todo', () => {
