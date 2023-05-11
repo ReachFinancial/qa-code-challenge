@@ -1,4 +1,4 @@
-import { test, expect, APIRequest, APIResponse } from '@playwright/test';
+import { test, expect, APIResponse } from '@playwright/test';
 import { Comment, Post, findPostsByUserId, getAllUserIds } from '../helper/json-api';
 
 test.describe('GET all users', () => {
