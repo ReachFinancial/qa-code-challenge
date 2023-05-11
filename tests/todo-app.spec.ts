@@ -172,32 +172,30 @@ test.describe('Other functions', () => {
     const activeFilter = page.locator('[href="#/active"]');
     const completedFilter = page.locator('[href="#/completed"]');
     const index = 1;
+    const checkActive = async (items: string[]) => {
+      await activeFilter.click();
+      expect(page.url()).toContain('active');
+      await expect(activeFilter).toHaveClass('selected');
+      await expect(todoItems).toHaveText(items, { ignoreCase: false });
+    };
+    const checkCompleted = async (items: string[]) => {
+      await completedFilter.click();
+      expect(page.url()).toContain('completed');
+      await expect(completedFilter).toHaveClass('selected');
+      await expect(todoItems).toHaveText(items, { ignoreCase: false });
+    };
 
     await toggles.nth(index).check();
     await expect(page.getByTestId('todo-count')).toHaveText(totalCount - 1 == 1 ? `${totalCount - 1} item left` : `${totalCount - 1} items left`);
 
     const completedItem = TODO_ITEMS.splice(index, 1);
 
-    await activeFilter.click();
-    expect(page.url()).toContain('active');
-    await expect(activeFilter).toHaveClass('selected');
-    await expect(todoItems).toHaveText(TODO_ITEMS, { ignoreCase: false });
-
-    await completedFilter.click();
-    expect(page.url()).toContain('completed');
-    await expect(completedFilter).toHaveClass('selected');
-    await expect(todoItems).toHaveText(completedItem, { ignoreCase: false });
+    await checkActive(TODO_ITEMS);
+    await checkCompleted(completedItem);
 
     // reload page
     await page.reload();
-    await activeFilter.click();
-    expect(page.url()).toContain('active');
-    await expect(activeFilter).toHaveClass('selected');
-    await expect(todoItems).toHaveText(TODO_ITEMS, { ignoreCase: false });
-
-    await completedFilter.click();
-    expect(page.url()).toContain('completed');
-    await expect(completedFilter).toHaveClass('selected');
-    await expect(todoItems).toHaveText(completedItem, { ignoreCase: false });
+    await checkActive(TODO_ITEMS);
+    await checkCompleted(completedItem);
   });
 });
