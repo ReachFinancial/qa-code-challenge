@@ -3,7 +3,7 @@ import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalSto
 import { todo as TODO_ITEMS } from '../fixtures/todo.json';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('https://demo.playwright.dev/todomvc');
+  await page.goto('/todomvc');
 });
 
 const totalCount = TODO_ITEMS.length;
