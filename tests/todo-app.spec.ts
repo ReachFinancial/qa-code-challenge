@@ -1,5 +1,5 @@
 import { test, expect, type Page, Locator } from '@playwright/test';
-import { checkNumberOfTodosInLocalStorage, createTodos } from '../helper/todo-app';
+import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage, createTodos } from '../helper/todo-app';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://demo.playwright.dev/todomvc');
@@ -25,7 +25,7 @@ test.describe('Create New Todo', () => {
     await checkNumberOfTodosInLocalStorage(page, totalCount);
   });
 
-  test('should clear text input field when an item is added', async ({ page }) => {
+  test('should be able to clear input text when an item is added', async ({ page }) => {
     await expect(page.locator('input.new-todo')).toBeEmpty();
     await checkNumberOfTodosInLocalStorage(page, totalCount);
   });
@@ -48,6 +48,53 @@ test.describe('Create New Todo', () => {
 
     await createTodos(page, [newItem]);
     await expect(toDoTitles.nth(totalCount)).toHaveText(newItem);
-    await expect(page.getByTestId('todo-count')).toHaveText(`${totalCount + 1} items left`);
+    await expect(page.getByTestId('todo-count')).toContainText(`${totalCount + 1} items left`);
+  });
+});
+
+test.describe('Marking as completed', () => {
+  test.beforeEach(async ({ page }) => {
+    await createTodos(page, TODO_ITEMS);
+    await checkNumberOfTodosInLocalStorage(page, totalCount);
+  });
+
+  test.afterEach(async ({ page }) => {
+    await checkNumberOfTodosInLocalStorage(page, totalCount);
+  });
+
+  test('should be able to mark all items as completed', async ({ page }) => {
+    await page.locator('input.toggle-all').check();
+
+    await expect(page.getByTestId('todo-item')).toHaveClass(['completed', 'completed']);
+    await expect(page.getByTestId('todo-count')).toContainText('0 items left');
+    await expect(page.locator('button.clear-completed')).toContainText('Clear completed', { ignoreCase: false });
+    await checkNumberOfCompletedTodosInLocalStorage(page, totalCount);
+  });
+
+  test('should allow clearing the completed state back to incomplete', async ({ page }) => {
+    const toggleAll = page.locator('input.toggle-all');
+    await toggleAll.check();
+    await toggleAll.uncheck();
+
+    await expect(page.getByTestId('todo-item')).toHaveClass(['', '']);
+    await expect(page.getByTestId('todo-count')).toContainText(`${totalCount} items left`);
+    await expect(page.locator('footer.footer')).not.toHaveText('Clear completed', { ignoreCase: false });
+  });
+
+  test('should allow marking all as completed with the arrow next to the prompt', async ({ page }) => {
+    const toggles = page.locator('input.toggle');
+    const togglesCount = await toggles.count();
+
+    expect(togglesCount).toEqual(totalCount);
+
+    for (let i = 0; i < togglesCount; i++) {
+      let itemsLeft = togglesCount - i - 1;
+
+      await toggles.nth(i).check();
+      await expect(toggles.nth(i)).toBeChecked();
+      await expect(page.getByTestId('todo-count')).toHaveText(itemsLeft == 1 ? `${itemsLeft} item left` : `${itemsLeft} items left`);
+    }
+
+    await expect(page.locator('input.toggle-all')).toBeChecked();
   });
 });
