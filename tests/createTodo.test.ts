@@ -1,43 +1,52 @@
 
-import { TODO_ITEMS } from '../src/const';
+import { Todo_Items, TODO_ITEMS } from '../src/const';
 import { test, expect } from '../src/_fixtures/test-fixtures'
 
 
-test.describe.parallel('Create a Todo tests', () => {
+test.describe.parallel('Create Todo Tests', () => {
 
     test.beforeEach(async ({ todo }) => {
         await todo.waitForAppready();
         await expect(todo.todoElements.createTodoInput).toBeVisible();
     })
+    test('User Verifies the list is empty if no item is there', async ({ todo }) => {
 
-    test('User creates One Todo and verifies the same', async ({ todo }) => {
-        await test.step('User enters the first todo task', async () => {
-            await todo.todoElements.createTodoInput.clear();
-            await todo.todoElements.createTodoInput.type(TODO_ITEMS.task1.taskValue)
-            await todo.page.keyboard.press("Enter")
+        expect(await todo.todoElements.itemsAdded.count()).toBe(0)
+    })
+    test('User Enters One Item To Empty List And verifies The same', async ({ todo }) => {
+        await test.step('User enters one item only', async () => {
+            await todo.createTodo(TODO_ITEMS[0])
         })
-        await test.step('User verifies the created task is added in list', async () => {
-            expect(await todo.todoElements.todoList.count()).toBe(1)
-            expect(await todo.todoElements.todoList.first().textContent()).toBe(TODO_ITEMS.task1.taskValue)
-            await todo.page.waitForTimeout(4000)
+        await test.step('User verifies the entered todo is added', async () => {
+            expect(await todo.todoElements.itemsAdded.count()).toBe(1)
+            expect(await todo.todoElements.itemsAdded.first().textContent()).toBe(Todo_Items.task1.taskValue.toString().trim())
         })
     })
-    test('User craetes multiple Todos and verifies the same ', async ({ todo }) => {
-        await test.step('User enters the second  todo', async () => {
-            await todo.todoElements.createTodoInput.clear();
-            await todo.todoElements.createTodoInput.type(TODO_ITEMS.task1.taskValue)
-            await todo.page.keyboard.press("Enter")
-            await todo.todoElements.createTodoInput.type(TODO_ITEMS.task2.taskValue)
-            await todo.page.keyboard.press("Enter")
-            await todo.todoElements.createTodoInput.type(TODO_ITEMS.task3.taskValue)
-            await todo.page.keyboard.press("Enter")
+    test('User Enters Multiple Items & Verifies the Same ', async ({ todo }) => {
+
+        await test.step('User enters the multiple  items', async () => {
+            const numberOfTodos = 3;
+            for (let index = 0; index < numberOfTodos; index++) {
+                await todo.createTodo(TODO_ITEMS[index])
+            }
         })
-        await test.step('User verifies the second created task is added in list', async () => {
-            expect(await todo.todoElements.todoList.count()).toBe(3)
-            expect(await todo.todoElements.todoList.nth(0).textContent()).toBe(TODO_ITEMS.task1.taskValue)
-            expect(await todo.todoElements.todoList.nth(1).textContent()).toBe(TODO_ITEMS.task2.taskValue)
-            expect(await todo.todoElements.todoList.nth(2).textContent()).toBe(TODO_ITEMS.task3.taskValue)
-            await todo.page.waitForTimeout(4000)
+        await test.step('User Verifies All The Entered Todos Are Added In List', async () => {
+            const itemsSize = await todo.todoElements.itemsAdded.count()
+            expect(itemsSize).toBe(3)
+            for (let index = 0; index < itemsSize; index++) {
+                expect(await todo.todoElements.itemsAdded.nth(index).textContent()).toBe(TODO_ITEMS[index].toString().trim())
+            }
+        })
+    })
+
+    test('App Should Not Allow User To Enter Existing ToDo ==> (Sample of Negative Test)', async ({ todo }) => {
+        await test.step('User enters the multiple  todos', async () => {
+            const numberOfTodos = 2;
+            for (let index = 0; index < numberOfTodos; index++) {
+                await todo.createTodo(["Stay Fit"])
+                expect(await todo.todoElements.itemsAdded.count()).not.toBe(2)
+                test.fail()
+            }
         })
     })
 })

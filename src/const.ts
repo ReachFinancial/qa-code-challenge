@@ -1,5 +1,3 @@
-import { EditTodo } from "./Todo/editTodo.po"
-
 export interface TaskAction {
     name: string
 }
@@ -17,19 +15,26 @@ export const TASK_ACTION = {
 
 }
 export interface TodoItems {
-    taskValue: string
+    taskValue: string[]
 }
-export const TODO_ITEMS =
+
+export const Todo_Items =
 
 {
     task1: <TodoItems>{
-        taskValue: ' Stay Positive '
+        taskValue: [' Stay Positive ']
     },
     task2: <TodoItems>{
-        taskValue: ' Work Hard '
+        taskValue: [' Work Hard ']
     },
     task3: <TodoItems>{
-        taskValue: ' Make It Happen '
+        taskValue: [' Make It Happen ']
     }
 
 }
+
+export const TODO_ITEMS = [
+    Todo_Items.task1.taskValue,
+    Todo_Items.task2.taskValue,
+    Todo_Items.task3.taskValue
+];
