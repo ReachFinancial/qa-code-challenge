@@ -7,7 +7,7 @@ import { TodoPage } from '../Todo/todo.po';
 export const test = base.extend<
     {
         base?: BasePage;
-        todo: TodoPage;
+        todoPage: TodoPage;
     },
     WorkerOptions
 >({
@@ -15,7 +15,7 @@ export const test = base.extend<
         await page.goto('', { waitUntil: 'domcontentloaded' });
         await use(new BasePage(page));
     },
-    todo: async ({ page }, use) => {
+    todoPage: async ({ page }, use) => {
         await page.goto('', { waitUntil: 'domcontentloaded' });
         await use(new TodoPage(page));
     },
