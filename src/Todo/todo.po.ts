@@ -19,7 +19,7 @@ export class TodoPage extends BasePage {
             allFilterTab: this.page.locator('ul.filters li a:has-text("All")'),
             activeFilterTab: this.page.locator('ul.filters li a:has-text("Active")'),
             completedFilterTab: this.page.locator('ul.filters li a:has-text("Completed")'),
-            completedItems: this.page.locator('//input[@class="toggle"][@checked]'),
+            completedItems: this.page.getByTestId('todo-item'),
             toggleCheckbox: this.page.locator('.toggle'),
             toggleAllButton: this.page.locator('.toggle-all'),
             clearCompletedButton: this.page.locator('.clear-completed'),
@@ -28,7 +28,7 @@ export class TodoPage extends BasePage {
         }
 
 
-    async createTodo(todoInput: string[]): Promise<void> {
+    async addTodoInList(todoInput: string[]): Promise<void> {
         for (const todo of todoInput) {
             await this.todoElements.createTodoInput.clear();
             await this.todoElements.createTodoInput.type(todo)
@@ -46,12 +46,12 @@ export class TodoPage extends BasePage {
         }
     }
 
-    async createMultipleTodos(numberOfTodos: number): Promise<void> {
+    async addMultipleTodos(numberOfTodos: number): Promise<void> {
         for (let index = 0; index < numberOfTodos; index++) {
-            await this.createTodo(TODO_ITEMS[index])
+            await this.addTodoInList(TODO_ITEMS[index])
         }
     }
-    
+
 }
 
 

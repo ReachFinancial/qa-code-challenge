@@ -8,25 +8,25 @@ test.describe.parallel('Create Todo Tests', () => {
         await todoPage.waitForAppready();
         await expect(todoPage.todoElements.createTodoInput).toBeVisible();
     })
-    test('User Verifies the list is empty if no item is there', async ({ todoPage }) => {
-
-        expect(await todoPage.todoElements.itemsAdded.count()).toBe(0)
-    })
+   
     test('User Enters One Item To Empty List And verifies The same', async ({ todoPage }) => {
+        await test.step('User Verifies the list is empty if no item is there', async () => {
+            expect(await todoPage.todoElements.itemsAdded.count()).toBe(0)
+        })
         await test.step('User enters one item only', async () => {
-            await todoPage.createTodo(TODO_ITEMS[0])
+            await todoPage.addTodoInList(TODO_ITEMS[0])
             await expect(todoPage.todoElements.todoCount).toHaveText('1 item left')
         })
-        await test.step('User verifies the entered todo is added', async () => {
+        await test.step('User verifies it should trim entered text', async () => {
             expect(await todoPage.todoElements.itemsAdded.count()).toBe(1)
+            expect(await todoPage.todoElements.itemsAdded.first().textContent.length).toBeLessThan(Todo_Items.task1.taskValue.toString().length)
             expect(await todoPage.todoElements.itemsAdded.first().textContent()).toBe(Todo_Items.task1.taskValue.toString().trim())
         })
     })
-    test('User Enters Multiple Items & Verifies the Same ', async ({ todoPage }) => {
-
+    test('should append new items to the bottom of the list', async ({ todoPage }) => {
         await test.step('User enters the multiple  items', async () => {
             const numberOfTodos: number = 3;
-            await todoPage.createMultipleTodos(numberOfTodos);
+            await todoPage.addMultipleTodos(numberOfTodos);
             if (numberOfTodos == 1) {
                 await expect(todoPage.todoElements.todoCount).toHaveText(numberOfTodos + ' item left')
             } else {
@@ -46,7 +46,7 @@ test.describe.parallel('Create Todo Tests', () => {
         await test.step('User enters the multiple  todos', async () => {
             const numberOfTodos = 2;
             for (let index = 0; index < numberOfTodos; index++) {
-                await todoPage.createTodo(["Stay Fit"])
+                await todoPage.addTodoInList(["Stay Fit"])
                 expect(await todoPage.todoElements.itemsAdded.count()).not.toBe(2)
                 test.fail()
             }

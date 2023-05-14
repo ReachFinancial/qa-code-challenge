@@ -12,14 +12,12 @@ export const TASK_ACTION = {
     completed: <TaskAction>{
         name: 'Completed'
     }
-
 }
 export interface TodoItems {
     taskValue: string[]
 }
 
 export const Todo_Items =
-
 {
     task1: <TodoItems>{
         taskValue: [' Stay Positive ']
@@ -30,7 +28,6 @@ export const Todo_Items =
     task3: <TodoItems>{
         taskValue: [' Make It Happen ']
     }
-
 }
 
 export const TODO_ITEMS = [

@@ -7,10 +7,10 @@ test.describe.parallel('Filters Todo Test', () => {
     test.beforeEach(async ({ todoPage }) => {
         await todoPage.waitForAppready();
         await expect(todoPage.todoElements.createTodoInput).toBeVisible();
-        await todoPage.createMultipleTodos(numberOfTodos)
+        await todoPage.addMultipleTodos(numberOfTodos)
     })
 
-    test('User MarkOn/ClickOn Each Item In List To Mark As Completed', async ({ todoPage }) => {
+    test('should be able to mark all items as completed by marking each item', async ({ todoPage }) => {
         await test.step('Verify All tab filter should be selected upon items added', async () => {
             await expect(todoPage.todoFilterElements.selectedTab).toHaveText("All")
         })
@@ -40,7 +40,7 @@ test.describe.parallel('Filters Todo Test', () => {
             }
         })
     })
-    test('User Marks All Items In List As Completed From Active Tab By Toggle-All Button', async ({ todoPage }) => {
+    test('should allow marking all as completed with the arrow next to the prompt', async ({ todoPage }) => {
         await test.step('User clicks on all items from toggle-all button', async () => {
             await todoPage.todoFilterElements.activeFilterTab.click()
             await todoPage.todoFilterElements.toggleAllButton.click()
@@ -55,7 +55,7 @@ test.describe.parallel('Filters Todo Test', () => {
             }
         })
     })
-    test('User Mark On All Items In List As Active From Completed Tab By Toggle-All Button', async ({ todoPage }) => {
+    test('should allow clearing the completed state back to incomplete', async ({ todoPage }) => {
         await test.step('User moves all the items to Active tab from completed tab and verifies No items to be left under Completed tab filter', async () => {
             await todoPage.todoFilterElements.activeFilterTab.click()
             await todoPage.todoFilterElements.toggleAllButton.click()
@@ -66,7 +66,7 @@ test.describe.parallel('Filters Todo Test', () => {
             expect(await todoPage.todoElements.itemsAdded.count()).toBe(0)
 
         })
-        await test.step('User verifies all items presence under Active tab filter', async () => {
+        await test.step('User verifies all items presence under Active tab filter as incompleted', async () => {
             await todoPage.todoFilterElements.activeFilterTab.click();
             expect(await todoPage.todoElements.itemsAdded.count()).toBe(numberOfTodos)
             for (let index = 0; index < await todoPage.todoElements.itemsAdded.count(); index++) {
