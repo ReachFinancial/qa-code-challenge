@@ -2,7 +2,6 @@
 import { TODO_ITEMS, Todo_Items } from '../src/const';
 import { test, expect } from '../src/_fixtures/test-fixtures'
 
-
 test.describe.parallel('Filters Todo Test', () => {
     const numberOfTodos: number = 3;
     test.beforeEach(async ({ todoPage }) => {
