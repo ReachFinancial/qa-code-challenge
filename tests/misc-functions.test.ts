@@ -2,7 +2,7 @@ import { test, expect } from '../src/_fixtures/test-fixtures'
 import { TODO_ITEMS } from '../src/const';
 
 
-test.describe.parallel.only('Misc Functions Tests', () => {
+test.describe.parallel('Misc Functions Tests', () => {
     const numberOfTodos: number = 3
     test.beforeEach(async ({ todoPage }) => {
         await todoPage.waitForAppready();

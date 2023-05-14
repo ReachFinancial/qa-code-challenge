@@ -9,7 +9,7 @@ test.describe.parallel('Edit Todo Tests', () => {
         await expect(todoPage.todoElements.createTodoInput).toBeVisible();
         await todoPage.addTodoInList(TODO_ITEMS[0])
     })
-   
+
     test('should be able to edit a record', async ({ todoPage }) => {
         await test.step('User Verifies List should not be empty', async () => {
             expect(await todoPage.todoElements.itemsAdded.count()).toBeGreaterThanOrEqual(1)
@@ -47,8 +47,8 @@ test.describe.parallel('Edit Todo Tests', () => {
             expect(await todoPage.todoElements.itemsAdded.count()).toBe(0)
         })
     })
-    
-    test('should cancel edits on escape', async ({ todoPage }) => {
+
+    test('should cancel editing on escape', async ({ todoPage }) => {
         await test.step('User double click on entered todo to edit', async () => {
             await todoPage.editTodo(TODO_ITEMS[0])
             await expect(todoPage.todoElements.editingElement).toBeVisible()
