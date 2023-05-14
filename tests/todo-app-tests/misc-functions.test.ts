@@ -1,5 +1,5 @@
-import { test, expect } from '../src/_fixtures/test-fixtures'
-import { TODO_ITEMS } from '../src/const';
+import { test, expect } from '../../src/_fixtures/test-fixtures'
+import { TODO_ITEMS } from '../../src/const';
 
 
 test.describe.parallel('Misc Functions Tests', () => {

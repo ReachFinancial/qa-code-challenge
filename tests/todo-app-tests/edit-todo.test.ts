@@ -1,6 +1,6 @@
 
-import { Todo_Items, TODO_ITEMS } from '../src/const';
-import { test, expect } from '../src/_fixtures/test-fixtures'
+import { Todo_Items, TODO_ITEMS } from '../../src/const';
+import { test, expect } from '../../src/_fixtures/test-fixtures'
 
 test.describe.parallel('Edit Todo Tests', () => {
 
