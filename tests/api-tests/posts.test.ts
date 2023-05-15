@@ -5,7 +5,7 @@ import { Posts } from '../../src/api-helper/posts.api'
 import { Users } from '../../src/api-helper/users.api';
 let responseGetSpecificPost, responseCreatePost, responseGetAllPosts, responseData, responsePostsPerUser, responseCommentsPerPost;
 let emptyArray: string[] = [];
-test.describe('GET all posts tests', () => {
+test.describe.parallel('GET all posts tests', () => {
 
 
     test.beforeEach(async () => {
@@ -63,7 +63,7 @@ test.describe('GET all posts tests', () => {
     })
 })
 
-test.describe('GET specific post tests', () => {
+test.describe.parallel('GET specific post tests', () => {
 
     test.beforeEach(async () => {
         await test.step('should be able to POST a new post', async () => {

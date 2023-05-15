@@ -3,7 +3,7 @@ import { test, expect } from '../../src/_fixtures/test-fixtures'
 import { ApiHelper } from '../../src/api-helper/api.helper';
 import { Users } from '../../src/api-helper/users.api'
 
-test.describe('Users API Tests', () => {
+test.describe.parallel('Users API Tests', () => {
     let responseGetAllUsers, responseData;
     let emptyArray: string[] = [];
     test.beforeEach(async () => {
