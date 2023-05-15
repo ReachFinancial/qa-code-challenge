@@ -38,5 +38,8 @@ export class Posts {
     static deletePost(id: string) {
         return CRUDHelper.delete(this.URL, this.endPoints + '/' + id, this.headers)
     }
+    static getAllPosts(): Promise<any> {
+        return CRUDHelper.get(this.URL, this.endPoints, this.headers)
+    }
 
 }
