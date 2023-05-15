@@ -4,5 +4,5 @@ export const API_END_POINTS = {
     ALBUMS_API_ENDPOINT: "/albums",
     PHOTOS_API_ENDPOINT: "/photos",
     TODOS_API_ENDPOINT: "/todos",
-    USERS_API_ENDPOINT: "/USERS",
+    USERS_API_ENDPOINT: "/users",
 };

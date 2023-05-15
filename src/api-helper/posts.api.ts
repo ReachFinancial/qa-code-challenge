@@ -7,13 +7,13 @@ export interface Post {
     body: string,
     userId: number,
 }
+
+
 export interface IHeaders {
     'Content-type': string,
     'charset': string,
 
 }
-
-
 export class Posts {
 
     private static URL = config.getBaseURL();
@@ -41,5 +41,11 @@ export class Posts {
     static getAllPosts(): Promise<any> {
         return CRUDHelper.get(this.URL, this.endPoints, this.headers)
     }
+    
+    static getCommentsOnPosts(postId:string) {
+        return CRUDHelper.get(this.URL, this.endPoints + '/' + postId +API_END_POINTS.COMMENTS_API_ENDPOINT, this.headers,postId)
+    }
+    
+
 
 }

@@ -1,5 +1,6 @@
 
 import { test, expect } from '../../src/_fixtures/test-fixtures'
+import { ApiHelper } from '../../src/api-helper/api.helper';
 import { Users } from '../../src/api-helper/users.api'
 
 test.describe('Users API Tests', () => {
@@ -46,28 +47,10 @@ test.describe('Users API Tests', () => {
         })
 
         await test.step('Rsponse from Users ==> Fetching duplicate catch phrases', async () => {
-            let resultToReturn = false;
-            let duplicate
-            for (let i = 0; i < responseGetAllUsers.body.length; i++) {
-                for (let j = 0; j < responseGetAllUsers.body.length; j++) {
-                    if (i !== j) {
-                        if (emptyArray[i] === emptyArray[j]) {
-                            resultToReturn = true;
-                            duplicate = [] = emptyArray[i]
-                            break;
-                        }
-                    }
-                }
-                if (resultToReturn) {
-                    break;
-                }
-            }
-            if (resultToReturn) {
-                console.log('Duplicate elements exist', duplicate);
-            }
-            else {
-                console.log('Duplicates dont exist ');
-            }
+            const duplicateFound = ApiHelper.findDuplicates(responseGetAllUsers.body.length, emptyArray)
+            //reflect in report
+            console.log("if duplicate exists??", await duplicateFound, (await duplicateFound).length)
+            expect((await duplicateFound).length).toBe(0)
         })
     })
 })

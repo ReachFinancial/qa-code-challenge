@@ -18,7 +18,7 @@ export class Users {
 
     private static URL = config.getBaseURL();
     private static endPoints = API_END_POINTS.USERS_API_ENDPOINT;
-    private static headers = {
+    private static headers= {
         'Content-type': 'application/json',
         'charset': 'UTF - 8'
     }
@@ -37,8 +37,12 @@ export class Users {
         return CRUDHelper.delete(this.URL, this.endPoints + '/' + id, this.headers)
     }
 
-    static getAllUsers():Promise<any> {
+    static getAllUsers(): Promise<any> {
         return CRUDHelper.get(this.URL, this.endPoints, this.headers)
+    }
+
+    static getAllPostsOnEachUser(userID: string): Promise<any> {
+        return CRUDHelper.get(this.URL, this.endPoints + '/' + userID + API_END_POINTS.POSTS_API_ENDPOINT, this.headers)
     }
 
 }

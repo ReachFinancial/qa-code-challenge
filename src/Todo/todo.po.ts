@@ -1,9 +1,5 @@
-import { Locator } from "@playwright/test";
-
-import { expect } from "../_fixtures/test-fixtures";
-
 import { BasePage } from "../base.po";
-import { TodoItems, TODO_ITEMS } from "../const";
+import { TODO_ITEMS } from "../const";
 
 export class TodoPage extends BasePage {
     readonly todoElements =
@@ -51,7 +47,6 @@ export class TodoPage extends BasePage {
             await this.addTodoInList(TODO_ITEMS[index])
         }
     }
-
 }
 
 
